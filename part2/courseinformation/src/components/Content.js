@@ -4,8 +4,6 @@ import Part from "./Part"
 const Content = ({ parts }) => {
 	const total = parts.reduce((prev, cur) => prev + cur.exercises, 0)
 
-	console.log(total)
-
 	return (
 		<div>
 			<div>
