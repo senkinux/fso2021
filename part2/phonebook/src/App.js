@@ -9,8 +9,14 @@ const App = () => {
 		const nameObj = {
 			name: newName,
 		}
-		setPersons(persons.concat(nameObj))
-		setNewName("")
+
+		if (persons.find(({ name }) => name === newName)) {
+			alert(`${newName} already exists in phonebook`)
+		} else {
+			setPersons(persons.concat(nameObj))
+			setNewName("")
+			return
+		}
 	}
 
 	return (
