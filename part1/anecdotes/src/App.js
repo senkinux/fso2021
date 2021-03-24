@@ -1,5 +1,9 @@
 import React, { useState } from "react"
 
+const Button = ({ handler, text }) => {
+	return <button onClick={handler}>{text}</button>
+}
+
 const App = () => {
 	const anecdotes = [
 		"If it hurts, do it more often",
@@ -11,21 +15,32 @@ const App = () => {
 	]
 
 	const [selected, setSelected] = useState(0)
+	const [votes, setVotes] = useState(new Array(anecdotes.length).fill(0))
 
 	const random = max => {
 		let num = Math.floor(Math.random() * Math.floor(max))
 		return num
 	}
 
-	const generateAnecdote = fn => {
-		setSelected(fn(anecdotes.length))
+	const generateAnecdote = randomNumberGenerator => {
+		setSelected(randomNumberGenerator(anecdotes.length))
 	}
+
+	const handleVote = idx => {
+		let anecdoteList = [...votes]
+		anecdoteList[idx] += 1
+		setVotes(anecdoteList)
+	}
+
+	console.log(votes)
 
 	return (
 		<div>
 			{anecdotes[selected]}
+			<div>has {votes[selected]} votes</div>
 			<br />
-			<button onClick={() => generateAnecdote(random)}>next anecdote</button>
+			<Button handler={() => handleVote(selected)} text="vote" />
+			<Button handler={() => generateAnecdote(random)} text="next anecdote" />
 		</div>
 	)
 }
