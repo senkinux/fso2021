@@ -5,9 +5,10 @@ const Button = ({ text, clickHandler }) => {
 }
 
 const Statistics = ({ stats }) => {
-	return (
+	return stats.all < 1 ? (
+		<>No feedback given</>
+	) : (
 		<>
-			<h2>statistics</h2>
 			<p>good {stats.good}</p>
 			<p>neutral {stats.neutral}</p>
 			<p>bad {stats.bad}</p>
@@ -36,6 +37,7 @@ const App = () => {
 			<Button text="good" clickHandler={() => setGood(good + 1)} />
 			<Button text="neutral" clickHandler={() => setNeutral(neutral + 1)} />
 			<Button text="bad" clickHandler={() => setBad(bad + 1)} />
+			<h2>statistics</h2>
 			<Statistics stats={stats} />
 		</div>
 	)
