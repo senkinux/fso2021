@@ -32,15 +32,21 @@ const App = () => {
 		setVotes(anecdoteList)
 	}
 
-	console.log(votes)
+	const maxValue = votes.reduce((prev, cur) => (prev > cur ? prev : cur))
+
+	const maxValueIdx = maxValue !== 0 ? votes.indexOf(maxValue) : 0
 
 	return (
 		<div>
+			<h2>Anecdote of the day</h2>
 			{anecdotes[selected]}
 			<div>has {votes[selected]} votes</div>
 			<br />
 			<Button handler={() => handleVote(selected)} text="vote" />
 			<Button handler={() => generateAnecdote(random)} text="next anecdote" />
+			<h2>Anecdote with most votes</h2>
+			<div>{anecdotes[maxValueIdx]}</div>
+			<div>has {maxValue} votes</div>
 		</div>
 	)
 }
