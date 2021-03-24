@@ -4,11 +4,13 @@ const Button = ({ text, clickHandler }) => {
 	return <button onClick={clickHandler}>{text}</button>
 }
 
-const Statistics = ({ text, value }) => {
+const Statistics = ({ text, value, all }) => {
 	return (
-		<p>
-			{text} {value}
-		</p>
+		<tr>
+			<td>
+				{text} {value}
+			</td>
+		</tr>
 	)
 }
 
@@ -29,12 +31,20 @@ const App = () => {
 			<Button text="neutral" clickHandler={() => setNeutral(neutral + 1)} />
 			<Button text="bad" clickHandler={() => setBad(bad + 1)} />
 			<h2>statistics</h2>
-			<Statistics text="good" value={good} />
-			<Statistics text="neutral" value={neutral} />
-			<Statistics text="bad" value={bad} />
-			<Statistics text="all" value={all} />
-			<Statistics text="average" value={average} />
-			<Statistics text="positive" value={positive} />
+			{all > 0 ? (
+				<table>
+					<tbody>
+						<Statistics text="good" value={good} />
+						<Statistics text="neutral" value={neutral} />
+						<Statistics text="bad" value={bad} />
+						<Statistics text="all" value={all} />
+						<Statistics text="average" value={average} />
+						<Statistics text="positive" value={positive} />
+					</tbody>
+				</table>
+			) : (
+				"No feedback given"
+			)}
 		</div>
 	)
 }
