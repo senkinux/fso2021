@@ -1,4 +1,7 @@
 import React, { useState } from "react"
+import PersonForm from "./components/PersonForm"
+import Persons from "./components/Persons"
+import Filter from "./components/Filter"
 
 const App = () => {
 	const [persons, setPersons] = useState([
@@ -7,6 +10,7 @@ const App = () => {
 		{ name: "Dan Abramov", number: "12-43-234345" },
 		{ name: "Mary Poppendieck", number: "39-23-6423122" },
 	])
+
 	const [newName, setNewName] = useState("")
 	const [newNumber, setNewNumber] = useState("")
 	const [keyword, setKeyword] = useState("")
@@ -28,10 +32,6 @@ const App = () => {
 		}
 	}
 
-	const onInputChange = e => {
-		setKeyword(e.target.value.toLowerCase())
-	}
-
 	const filteredNames = persons.filter(person =>
 		person.name.toLowerCase().includes(keyword)
 	)
@@ -39,35 +39,17 @@ const App = () => {
 	return (
 		<div>
 			<h2>Phonebook</h2>
-			<div>
-				filter show with:{" "}
-				<input value={keyword} onChange={e => onInputChange(e)} />
-			</div>
+			<Filter keyword={keyword} setKeyword={setKeyword} />
 			<h2>add a new</h2>
-			<form onSubmit={handleSubmit}>
-				<div>
-					name:{" "}
-					<input value={newName} onChange={e => setNewName(e.target.value)} />
-				</div>
-				<div>
-					number:{" "}
-					<input
-						value={newNumber}
-						onChange={e => setNewNumber(e.target.value)}
-					/>
-				</div>
-				<div>
-					<button type="submit">add</button>
-				</div>
-			</form>
+			<PersonForm
+				newName={newName}
+				setNewName={setNewName}
+				newNumber={newNumber}
+				setNewNumber={setNewNumber}
+				handleSubmit={handleSubmit}
+			/>
 			<h2>Numbers</h2>
-			<div>
-				{filteredNames.map(person => (
-					<p key={person.name}>
-						{person.name} {person.number}
-					</p>
-				))}
-			</div>
+			<Persons filteredNames={filteredNames} />
 		</div>
 	)
 }
