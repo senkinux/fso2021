@@ -19,15 +19,25 @@ const App = () => {
 		person.name.toLowerCase().startsWith(keyword.toLowerCase())
 	)
 
+	const onClickHandler = countryName => {
+		setKeyword(countryName)
+	}
+
 	return (
 		<div>
 			<div>
 				find countries: <input value={keyword} onChange={handleChange} />
 			</div>
+			<br />
 			<div>
 				{filteredCountries.length > 1 && filteredCountries.length < 10
 					? filteredCountries.map(country => (
-							<p key={country.name}>{country.name}</p>
+							<div key={country.name}>
+								{country.name}
+								<button onClick={() => onClickHandler(country.name)}>
+									show
+								</button>
+							</div>
 					  ))
 					: filteredCountries.length > 10
 					? "Too many matches, specify another filter"
