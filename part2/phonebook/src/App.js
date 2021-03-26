@@ -51,7 +51,11 @@ const App = () => {
 				handleSubmit={handleSubmit}
 			/>
 			<h2>Numbers</h2>
-			<Persons filteredNames={filteredNames} />
+			<Persons
+				filteredNames={filteredNames}
+				persons={persons}
+				setPersons={setPersons}
+			/>
 		</div>
 	)
 }
