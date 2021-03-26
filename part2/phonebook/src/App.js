@@ -6,14 +6,13 @@ import services from "./services/services"
 
 const App = () => {
 	const [persons, setPersons] = useState([])
+	const [newName, setNewName] = useState("")
+	const [newNumber, setNewNumber] = useState("")
+	const [keyword, setKeyword] = useState("")
 
 	useEffect(() => {
 		services.getAll().then(res => setPersons(res))
 	}, [])
-
-	const [newName, setNewName] = useState("")
-	const [newNumber, setNewNumber] = useState("")
-	const [keyword, setKeyword] = useState("")
 
 	const handleSubmit = e => {
 		e.preventDefault()
