@@ -16,15 +16,30 @@ const App = () => {
 
 	const handleSubmit = e => {
 		e.preventDefault()
-		const nameObj = {
+		const newContact = {
 			name: newName,
 			number: newNumber,
 		}
 
-		if (persons.find(({ name }) => name === newName)) {
-			alert(`${newName} already exists in phonebook`)
+		const contactExists = persons.find(({ name }) => name === newName)
+
+		if (contactExists) {
+			const updateContact = window.confirm(
+				`${contactExists.name} is already in your phonebook. Would you like to update it's number ?`
+			)
+			if (updateContact) {
+				services
+					.update(contactExists.id, { ...contactExists, number: newNumber })
+					.then(updatedContact => {
+						setPersons(
+							persons.map(person =>
+								person.name === newName ? updatedContact : person
+							)
+						)
+					})
+			}
 		} else {
-			services.create(nameObj).then(address => {
+			services.create(newContact).then(address => {
 				setPersons(persons.concat(address))
 				setNewName("")
 				setNewNumber("")
