@@ -11,7 +11,8 @@ const App = () => {
 	const [newName, setNewName] = useState("")
 	const [newNumber, setNewNumber] = useState("")
 	const [keyword, setKeyword] = useState("")
-	const [message, setMessage] = useState(false)
+	const [message, setMessage] = useState("")
+	const [error, setError] = useState(false)
 
 	useEffect(() => {
 		services.getAll().then(res => setPersons(res))
@@ -40,6 +41,14 @@ const App = () => {
 							)
 						)
 					})
+					.catch(err => {
+						setMessage(`${newName} has already been deleted from database.`)
+						setError(!error)
+						setTimeout(() => {
+							setMessage("")
+							setError(!error)
+						}, 2500)
+					})
 			}
 		} else {
 			services.create(newContact).then(address => {
@@ -63,7 +72,12 @@ const App = () => {
 	return (
 		<div>
 			<h2>Phonebook</h2>
-			{message ? <Message name={message} className="success" /> : null}
+			{message && !error ? (
+				<Message message={message} className="success" />
+			) : null}
+			{message && error ? (
+				<Message message={message} className="error" />
+			) : null}
 			<Filter keyword={keyword} setKeyword={setKeyword} />
 			<h2>add a new</h2>
 			<PersonForm
