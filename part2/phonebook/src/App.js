@@ -3,12 +3,15 @@ import PersonForm from "./components/PersonForm"
 import Persons from "./components/Persons"
 import Filter from "./components/Filter"
 import services from "./services/services"
+import Message from "./components/Message"
+import "./index.css"
 
 const App = () => {
 	const [persons, setPersons] = useState([])
 	const [newName, setNewName] = useState("")
 	const [newNumber, setNewNumber] = useState("")
 	const [keyword, setKeyword] = useState("")
+	const [message, setMessage] = useState(false)
 
 	useEffect(() => {
 		services.getAll().then(res => setPersons(res))
@@ -43,6 +46,10 @@ const App = () => {
 				setPersons(persons.concat(address))
 				setNewName("")
 				setNewNumber("")
+				setMessage(`Added ${newName}`)
+				setTimeout(() => {
+					setMessage("")
+				}, 2500)
 			})
 
 			return
@@ -56,6 +63,7 @@ const App = () => {
 	return (
 		<div>
 			<h2>Phonebook</h2>
+			{message ? <Message name={message} className="success" /> : null}
 			<Filter keyword={keyword} setKeyword={setKeyword} />
 			<h2>add a new</h2>
 			<PersonForm
