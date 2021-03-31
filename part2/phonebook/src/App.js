@@ -51,15 +51,25 @@ const App = () => {
 					})
 			}
 		} else {
-			services.create(newContact).then(address => {
-				setPersons(persons.concat(address))
-				setNewName("")
-				setNewNumber("")
-				setMessage(`Added ${newName}`)
-				setTimeout(() => {
-					setMessage("")
-				}, 2500)
-			})
+			services
+				.create(newContact)
+				.then(address => {
+					setPersons(persons.concat(address))
+					setNewName("")
+					setNewNumber("")
+					setMessage(`Added ${newName}`)
+					setTimeout(() => {
+						setMessage("")
+					}, 2500)
+				})
+				.catch(err => {
+					setError(!error)
+					setMessage(err.response.data.error)
+					setTimeout(() => {
+						setError(error)
+						setMessage("")
+					}, 2000)
+				})
 
 			return
 		}
