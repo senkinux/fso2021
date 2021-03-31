@@ -42,11 +42,11 @@ const App = () => {
 						)
 					})
 					.catch(err => {
-						setMessage(`${newName} has already been deleted from database.`)
+						setMessage(err.response.data.error)
 						setError(!error)
 						setTimeout(() => {
+							setError(error)
 							setMessage("")
-							setError(!error)
 						}, 2500)
 					})
 			}
