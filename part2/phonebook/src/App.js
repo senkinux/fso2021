@@ -42,6 +42,7 @@ const App = () => {
 						)
 					})
 					.catch(err => {
+						console.log({ err })
 						setMessage(err.response.data.error)
 						setError(!error)
 						setTimeout(() => {
