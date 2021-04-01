@@ -1,0 +1,11 @@
+{
+  "name": "part4",
+  "version": "1.0.0",
+  "description": "part \u001f\u001f4 for fullstackopen",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "freddies.ribs",
+  "license": "ISC"
+}
