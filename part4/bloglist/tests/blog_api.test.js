@@ -76,9 +76,24 @@ describe("create new blog post", () => {
 })
 
 test("missing likes property defaults to 0", async () => {
-	const res = await api.post("/api/blogs").send({})
+	const res = await api
+		.post("/api/blogs")
+		.send({ title: "Full Stack Developer", url: "fullstackopen.com" })
 	console.log(res.body)
 	expect(res.body.likes).toBe(0)
+})
+
+describe("title or url are missing", () => {
+	test("title is missing", async () => {
+		await api.post("/api/blogs").send({ url: "fullstackopen.com" }).expect(400)
+	})
+
+	test("url is missing", async () => {
+		await api
+			.post("/api/blogs")
+			.send({ title: "Full Stack Developer" })
+			.expect(400)
+	})
 })
 
 afterAll(() => mongoose.connection.close())
