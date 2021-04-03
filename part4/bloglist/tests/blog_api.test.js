@@ -25,6 +25,15 @@ const bloglist = [
 	},
 ]
 
+const single = {
+	_id: "5a422bc61b54a676234d17fc",
+	title: "Type wars",
+	author: "Robert C. Martin",
+	url: "http://blog.cleancoder.com/uncle-bob/2016/05/01/TypeWars.html",
+	likes: 2,
+	__v: 0,
+}
+
 beforeEach(async () => {
 	await Blog.deleteMany({})
 	let blog = new Blog(bloglist[0])
@@ -54,16 +63,8 @@ test("id to be defined", async () => {
 })
 
 describe("create new blog post", () => {
-	const single = {
-		_id: "5a422bc61b54a676234d17fc",
-		title: "Type wars",
-		author: "Robert C. Martin",
-		url: "http://blog.cleancoder.com/uncle-bob/2016/05/01/TypeWars.html",
-		likes: 2,
-		__v: 0,
-	}
 	test("fetched data length", async () => {
-		const res = await api.post("/api/blogs").send(single)
+		await api.post("/api/blogs").send(single)
 		const all = await api.get("/api/blogs")
 
 		expect(all.body).toHaveLength(bloglist.length + 1)
@@ -72,6 +73,12 @@ describe("create new blog post", () => {
 		const res = await api.post("/api/blogs").send(single)
 		expect(res.body.title).toContain("Type wars")
 	})
+})
+
+test("missing likes property defaults to 0", async () => {
+	const res = await api.post("/api/blogs").send({})
+	console.log(res.body)
+	expect(res.body.likes).toBe(0)
 })
 
 afterAll(() => mongoose.connection.close())
