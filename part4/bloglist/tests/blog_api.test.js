@@ -48,4 +48,9 @@ describe("return correct amount of blogs in json format", () => {
 	})
 })
 
+test("id to be defined", async () => {
+	const res = await api.get("/api/blogs")
+	expect(res.body[0].id).toBeDefined()
+})
+
 afterAll(() => mongoose.connection.close())
