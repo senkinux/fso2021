@@ -9,7 +9,7 @@ const blogSchema = new mongoose.Schema({
 
 blogSchema.set("toJSON", {
 	transform: (doc, obj) => {
-		obj.id = doc._id.toString()
+		obj.id = obj._id.toString()
 		delete obj._id
 		delete obj.__v
 	},
