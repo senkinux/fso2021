@@ -7,9 +7,9 @@ Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InBhaW50ZXIiLCJpZCI6IjYwNmRjYjllYzQ0N2Q0NTE5OGY2YjlhZiIsImlhdCI6MTYxNzgwOTk0OH0.keqgKwP68tsAGGOmCHQYHSa-T4ancexCbv7SoCdu2lA
 
 {
-  "title": "How to train a dragon",
-  "url": "www.howto.dragon",
-  "author": "dragon trainer"
+	"title": "TDD harms architecture",
+		"author": "Robert C. Martin",
+		"url": "http://blog.cleancoder.com/uncle-bob/2017/03/03/TDD-Harms-Architecture.html"
 }
 
 ###
