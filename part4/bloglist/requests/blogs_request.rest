@@ -9,7 +9,8 @@ Content-Type: application/json
   "title": "Atomic Habits",
   "author": "James Clear",
   "url": "www.atomichabits.com",
-  "likes": 0
+  "likes": 0,
+  "userId": "606ca4e7a30d3d0c6c8b3af9"
 }
 
 ###
