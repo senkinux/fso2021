@@ -79,7 +79,6 @@ test("missing likes property defaults to 0", async () => {
 	const res = await api
 		.post("/api/blogs")
 		.send({ title: "Full Stack Developer", url: "fullstackopen.com" })
-	console.log(res.body)
 	expect(res.body.likes).toBe(0)
 })
 
