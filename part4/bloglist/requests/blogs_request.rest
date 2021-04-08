@@ -14,8 +14,19 @@ Content-Type: application/json
 
 ###
 
-DELETE http://localhost:3003/api/blogs/606ebc4c2c563646945b8089
+POST http://localhost:3003/api/blogs
+Content-Type: application/json
 
+{
+  "title": "The Power Of Habit",
+  "author": "Charles Duhigg",
+  "url": "www.duhigg.com",
+  "likes": 0
+}
+
+###
+
+DELETE http://localhost:3003/api/blogs/606ee1626e790f2654aea4e1
 ###
 
 PUT http://localhost:3003/api/blogs/606c271a0f1fa07960c45341
