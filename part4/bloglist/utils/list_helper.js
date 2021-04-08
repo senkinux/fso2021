@@ -36,4 +36,27 @@ const mostBlogs = blogs => {
 	return maxPerson
 }
 
-module.exports = { dummy, totalLikes, favoriteBlog, mostBlogs }
+const mostLikes = blogs => {
+	const cache = {}
+	blogs.map(item => {
+		if (item.author in cache) {
+			cache[item.author] += item.likes
+		} else {
+			cache[item.author] = item.likes
+		}
+	})
+
+	let val = 0
+	let maxPerson = {}
+	for (key in cache) {
+		if (val < cache[key]) {
+			maxPerson.author = key
+			maxPerson.likes = cache[key]
+			val = cache[key]
+		}
+	}
+
+	return maxPerson
+}
+
+module.exports = { dummy, totalLikes, favoriteBlog, mostBlogs, mostLikes }
