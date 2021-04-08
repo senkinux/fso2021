@@ -13,4 +13,27 @@ const favoriteBlog = blogs => {
 	return favoriteBlog
 }
 
-module.exports = { dummy, totalLikes, favoriteBlog }
+const mostBlogs = blogs => {
+	const arrOfAuthors = blogs.map(item => item.author)
+	const total = {}
+	arrOfAuthors.map(author => {
+		if (author in total) {
+			total[author] = total[author] + 1
+		} else {
+			total[author] = 1
+		}
+	})
+
+	let maxPerson = {}
+	let val = 0
+	for (key in total) {
+		if (total[key] > val) {
+			maxPerson.author = key
+			maxPerson.blogs = total[key]
+			val = total[key]
+		}
+	}
+	return maxPerson
+}
+
+module.exports = { dummy, totalLikes, favoriteBlog, mostBlogs }
