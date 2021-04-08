@@ -20,16 +20,4 @@ Content-Type: application/json
 
 ###
 
-POST http://localhost:3003/api/users
-Content-Type: application/json
-
-{
-  "name": "Charles Dickens",
-  "username" : "charlie",
-  "password": "xxxx",
-  "blogs": "606c271a0f1fa07960c45341"
-}
-
-###
-
 GET http://localhost:3003/api/users
