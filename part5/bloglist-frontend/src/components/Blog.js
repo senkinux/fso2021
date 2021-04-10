@@ -1,5 +1,6 @@
 import React, { useState } from "react"
-const Blog = ({ blog }) => {
+import blogService from "../services/blogs"
+const Blog = ({ blog, setBlogs, list }) => {
 	const [blogVisible, setBlogVisible] = useState(false)
 
 	const blogStyle = {
@@ -10,6 +11,22 @@ const Blog = ({ blog }) => {
 		marginBottom: 5,
 	}
 
+	const likeHandler = async () => {
+		const newBlog = {
+			author: blog.author,
+			likes: blog.likes + 1,
+			title: blog.title,
+			url: blog.url,
+			user: blog.user.id,
+		}
+
+		const response = await blogService.update(blog.id, newBlog)
+		const updatedBlogIdx = list.findIndex(b => b.id === response.id)
+		const listCopy = [...list]
+		listCopy[updatedBlogIdx] = response
+		setBlogs(listCopy)
+	}
+
 	return (
 		<div style={blogStyle}>
 			{blog.title} {blog.author}
@@ -18,7 +35,7 @@ const Blog = ({ blog }) => {
 				<div>
 					<div>{blog.url}</div>
 					<div>
-						likes {blog.likes} <button>like</button>
+						likes {blog.likes} <button onClick={likeHandler}>like</button>
 					</div>
 					<div>{blog.author}</div>
 				</div>

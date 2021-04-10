@@ -53,7 +53,7 @@ const App = () => {
 						blogFormVisible={blogFormVisible}
 					/>
 					{blogs.map(blog => (
-						<Blog key={blog.id} blog={blog} />
+						<Blog key={blog.id} blog={blog} setBlogs={setBlogs} list={blogs} />
 					))}
 				</div>
 			) : (
