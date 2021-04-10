@@ -1,7 +1,14 @@
-import React, { useState } from "react"
+import React, { useState, useEffect } from "react"
 import blogService from "../services/blogs"
 const Blog = ({ blog, setBlogs, list }) => {
 	const [blogVisible, setBlogVisible] = useState(false)
+	const [canDeleteBlog, setCanDeleteBlog] = useState(null)
+
+	useEffect(() => {
+		const userId = JSON.parse(window.localStorage.getItem("loggedUser"))
+		const canUserDeleteBlog = blog.user.id === userId.id
+		setCanDeleteBlog(canUserDeleteBlog)
+	}, [blog, canDeleteBlog])
 
 	const blogStyle = {
 		paddingTop: 10,
@@ -27,6 +34,21 @@ const Blog = ({ blog, setBlogs, list }) => {
 		setBlogs(listCopy)
 	}
 
+	const deleteHandler = async () => {
+		const confirmation = window.confirm(
+			`Are you sure you want to delete ${blog.title} by ${blog.author}`
+		)
+		if (confirmation) {
+			try {
+				await blogService.deleteBlog(blog.id)
+				const fetchedBlogs = await blogService.getAll()
+				setBlogs(fetchedBlogs)
+			} catch (error) {
+				window.alert("Ooops, something went wrong")
+			}
+		}
+	}
+
 	return (
 		<div style={blogStyle}>
 			{blog.title} {blog.author}
@@ -38,6 +60,16 @@ const Blog = ({ blog, setBlogs, list }) => {
 						likes {blog.likes} <button onClick={likeHandler}>like</button>
 					</div>
 					<div>{blog.author}</div>
+					{canDeleteBlog ? (
+						<div>
+							<button
+								style={{ backgroundColor: "red" }}
+								onClick={deleteHandler}
+							>
+								delete
+							</button>
+						</div>
+					) : null}
 				</div>
 			)}
 		</div>
