@@ -2,7 +2,7 @@ import React, { useState } from "react"
 import loginService from "../services/login"
 import blogService from "../services/blogs"
 
-const Login = ({ setUser }) => {
+const Login = ({ setUser, setError, setMessage }) => {
 	const [username, setUsername] = useState("")
 	const [password, setPassword] = useState("")
 
@@ -17,7 +17,12 @@ const Login = ({ setUser }) => {
 			setUsername("")
 			setPassword("")
 		} catch (error) {
-			console.log(error)
+			setError(true)
+			setMessage("incorrect username or password")
+			setTimeout(() => {
+				setError(false)
+				setMessage("")
+			}, 2500)
 		}
 	}
 	return (
