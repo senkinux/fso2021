@@ -1,8 +1,15 @@
 import React, { useState, useEffect } from "react"
 import blogService from "../services/blogs"
+import PropTypes from "prop-types"
 const Blog = ({ blog, setBlogs, list }) => {
 	const [blogVisible, setBlogVisible] = useState(false)
 	const [canDeleteBlog, setCanDeleteBlog] = useState(null)
+
+	Blog.propTypes = {
+		blog: PropTypes.object.isRequired,
+		setBlogs: PropTypes.func.isRequired,
+		list: PropTypes.array.isRequired,
+	}
 
 	useEffect(() => {
 		const userId = JSON.parse(window.localStorage.getItem("loggedUser"))
