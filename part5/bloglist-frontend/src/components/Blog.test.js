@@ -20,12 +20,24 @@ describe("<Blog />", () => {
 	})
 
 	test("url and likes are displayed after click", () => {
-		const component = render(
-			<Blog blog={dummyBlog} list={[]} setBlogs={() => {}} />
-		)
+		const component = render(<Blog blog={dummyBlog} />)
 		const btn = component.getByText("view")
 		fireEvent.click(btn)
 		expect(component.container).toHaveTextContent(dummyBlog.url)
 		expect(component.container).toHaveTextContent(dummyBlog.likes)
+	})
+
+	test("if like button clicked twice, component received as props is called twice", () => {
+		const mockHandler = jest.fn()
+		const component = render(
+			<Blog blog={dummyBlog} likeHandler={mockHandler} />
+		)
+		const viewBtn = component.getByText("view")
+		fireEvent.click(viewBtn)
+
+		const likeBtn = component.getByText("like")
+		fireEvent.click(likeBtn)
+		fireEvent.click(likeBtn)
+		expect(mockHandler.mock.calls).toHaveLength(2)
 	})
 })

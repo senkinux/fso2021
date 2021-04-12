@@ -5,8 +5,8 @@ const Blog = ({ blog, deleteHandler, likeHandler }) => {
 
 	Blog.propTypes = {
 		blog: PropTypes.object.isRequired,
-		setBlogs: PropTypes.func.isRequired,
-		list: PropTypes.array.isRequired,
+		deletehandler: PropTypes.func,
+		likeHandler: PropTypes.func,
 	}
 
 	const canDeleteBlog = JSON.parse(window.localStorage.getItem("loggedUser"))
