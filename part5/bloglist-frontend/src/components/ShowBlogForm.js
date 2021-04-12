@@ -1,14 +1,7 @@
 import React from "react"
 import BlogForm from "./BlogForm"
 
-const ShowBlogForm = ({
-	setBlogs,
-	blogs,
-	setMessage,
-	setError,
-	setBlogFormVisible,
-	blogFormVisible,
-}) => {
+const ShowBlogForm = ({ setBlogFormVisible, blogFormVisible, createBlog }) => {
 	const hideWhenVisible = { display: blogFormVisible ? "none" : "" }
 	const showWhenVisible = { display: blogFormVisible ? "" : "none" }
 
@@ -20,12 +13,7 @@ const ShowBlogForm = ({
 				</button>
 			</div>
 			<div style={showWhenVisible}>
-				<BlogForm
-					setBlogs={setBlogs}
-					blogs={blogs}
-					setMessage={setMessage}
-					setError={setError}
-				/>
+				<BlogForm createBlog={createBlog} />
 				<button onClick={() => setBlogFormVisible(!blogFormVisible)}>
 					cancel
 				</button>

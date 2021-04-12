@@ -47,6 +47,26 @@ const App = () => {
 		setBlogs(listCopy)
 	}
 
+	const createBlog = async blog => {
+		try {
+			const newBlog = await blogService.create(blog)
+			setBlogs(blogs.concat(newBlog))
+			setMessage(
+				`${newBlog.title} by ${newBlog.author} was successfully created`
+			)
+			setTimeout(() => {
+				setMessage("")
+			}, 2500)
+		} catch (error) {
+			setError(true)
+			setMessage(error.name)
+			setTimeout(() => {
+				setError(false)
+				setMessage("")
+			}, 2500)
+		}
+	}
+
 	const deleteHandler = async blog => {
 		const confirmation = window.confirm(
 			`Are you sure you want to delete ${blog.title} by ${blog.author}`
@@ -76,12 +96,9 @@ const App = () => {
 					{`${user.username} is logged in `}
 					<button onClick={logoutHandler}>logout</button>
 					<ShowBlogForm
-						setBlogs={setBlogs}
-						blogs={blogs}
-						setMessage={setMessage}
-						setError={setError}
 						setBlogFormVisible={setBlogFormVisible}
 						blogFormVisible={blogFormVisible}
+						createBlog={createBlog}
 					/>
 					{blogs
 						.sort((a, b) => b.likes - a.likes)
