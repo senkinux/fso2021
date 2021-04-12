@@ -31,6 +31,37 @@ const App = () => {
 		setUser(null)
 	}
 
+	const likeHandler = async blog => {
+		const newBlog = {
+			author: blog.author,
+			likes: blog.likes + 1,
+			title: blog.title,
+			url: blog.url,
+			user: blog.user.id,
+		}
+
+		const response = await blogService.update(blog.id, newBlog)
+		const updatedBlogIdx = blogs.findIndex(b => b.id === response.id)
+		const listCopy = [...blogs]
+		listCopy[updatedBlogIdx] = response
+		setBlogs(listCopy)
+	}
+
+	const deleteHandler = async blog => {
+		const confirmation = window.confirm(
+			`Are you sure you want to delete ${blog.title} by ${blog.author}`
+		)
+		if (confirmation) {
+			try {
+				await blogService.deleteBlog(blog.id)
+				const fetchedBlogs = await blogService.getAll()
+				setBlogs(fetchedBlogs)
+			} catch (error) {
+				window.alert("Ooops, something went wrong")
+			}
+		}
+	}
+
 	return (
 		<div>
 			{message && !error ? (
@@ -58,8 +89,8 @@ const App = () => {
 							<Blog
 								key={blog.id}
 								blog={blog}
-								setBlogs={setBlogs}
-								list={blogs}
+								deleteHandler={() => deleteHandler(blog)}
+								likeHandler={() => likeHandler(blog)}
 							/>
 						))}
 				</div>
