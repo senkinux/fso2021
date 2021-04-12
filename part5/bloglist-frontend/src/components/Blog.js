@@ -1,9 +1,8 @@
-import React, { useState, useEffect } from "react"
+import React, { useState } from "react"
 import blogService from "../services/blogs"
 import PropTypes from "prop-types"
 const Blog = ({ blog, setBlogs, list }) => {
 	const [blogVisible, setBlogVisible] = useState(false)
-	const [canDeleteBlog, setCanDeleteBlog] = useState(null)
 
 	Blog.propTypes = {
 		blog: PropTypes.object.isRequired,
@@ -11,11 +10,7 @@ const Blog = ({ blog, setBlogs, list }) => {
 		list: PropTypes.array.isRequired,
 	}
 
-	useEffect(() => {
-		const userId = JSON.parse(window.localStorage.getItem("loggedUser"))
-		const canUserDeleteBlog = blog.user.id === userId.id
-		setCanDeleteBlog(canUserDeleteBlog)
-	}, [blog, canDeleteBlog])
+	const canDeleteBlog = JSON.parse(window.localStorage.getItem("loggedUser"))
 
 	const blogStyle = {
 		paddingTop: 10,
@@ -57,7 +52,7 @@ const Blog = ({ blog, setBlogs, list }) => {
 	}
 
 	return (
-		<div style={blogStyle}>
+		<div style={blogStyle} className="blog_test">
 			{blog.title} {blog.author}
 			<button onClick={() => setBlogVisible(!blogVisible)}>view</button>
 			{!blogVisible ? null : (
