@@ -38,6 +38,8 @@ describe("Blog App", function () {
 
 		it("A blog can be created", function () {
 			cy.createBlog({ author: "mario", title: "supermario", url: "mario.io" })
+			cy.contains("view").click()
+			cy.contains("like").click()
 		})
 	})
 })
