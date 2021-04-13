@@ -41,5 +41,11 @@ describe("Blog App", function () {
 			cy.contains("view").click()
 			cy.contains("like").click()
 		})
+
+		it("user who created a blog can delete it", function () {
+			cy.createBlog({ author: "mario", title: "supermario", url: "mario.io" })
+			cy.contains("view").click()
+			cy.contains("delete").click()
+		})
 	})
 })
