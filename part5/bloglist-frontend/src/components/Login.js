@@ -33,6 +33,7 @@ const Login = ({ setUser, setError, setMessage }) => {
 					<label></label>
 					username{" "}
 					<input
+						id="username"
 						type="text"
 						value={username}
 						onChange={e => setUsername(e.target.value)}
@@ -41,12 +42,15 @@ const Login = ({ setUser, setError, setMessage }) => {
 				<div>
 					password{" "}
 					<input
+						id="password"
 						type="password"
 						value={password}
 						onChange={e => setPassword(e.target.value)}
 					/>
 				</div>
-				<button type="submit">login</button>
+				<button type="submit" id="login-btn">
+					login
+				</button>
 			</form>
 		</div>
 	)
