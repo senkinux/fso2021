@@ -30,4 +30,14 @@ describe("Blog App", function () {
 			)
 		})
 	})
+
+	describe("When logged in", function () {
+		beforeEach(function () {
+			cy.login({ username: "Bobby", password: "bob123" })
+		})
+
+		it("A blog can be created", function () {
+			cy.createBlog({ author: "mario", title: "supermario", url: "mario.io" })
+		})
+	})
 })
