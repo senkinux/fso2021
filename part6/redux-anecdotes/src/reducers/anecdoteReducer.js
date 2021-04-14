@@ -29,6 +29,10 @@ const reducer = (state = initialState, action) => {
           ? { ...blog, votes: blog.votes + 1 }
           : blog
       )
+    case "CREATE_BLOG":
+      const newBlog = asObject(action.payload.content)
+      const updatedState = [...state, newBlog]
+      return updatedState
     default:
       return state
   }

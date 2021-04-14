@@ -10,6 +10,18 @@ const App = () => {
     dispatch({ type: "VOTE", payload: { id } })
   }
 
+  const createBlog = e => {
+    e.preventDefault()
+    const newBlog = e.target.blog.value
+    e.target.blog.value = ""
+    dispatch({
+      type: "CREATE_BLOG",
+      payload: {
+        content: newBlog,
+      },
+    })
+  }
+
   return (
     <div>
       <h2>Anecdotes</h2>
@@ -23,9 +35,9 @@ const App = () => {
         </div>
       ))}
       <h2>create new</h2>
-      <form>
+      <form onSubmit={createBlog}>
         <div>
-          <input />
+          <input name="blog" />
         </div>
         <button>create</button>
       </form>
