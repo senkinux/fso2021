@@ -19,6 +19,22 @@ const asObject = anecdote => {
 
 const initialState = anecdotesAtStart.map(asObject)
 
+export const addBlog = newBlog => {
+  return {
+    type: "CREATE_BLOG",
+    payload: {
+      content: newBlog,
+    },
+  }
+}
+
+export const likeBlog = id => {
+  return {
+    type: "VOTE",
+    payload: { id },
+  }
+}
+
 const reducer = (state = initialState, action) => {
   // console.log("state now: ", state)
   // console.log("action", action)

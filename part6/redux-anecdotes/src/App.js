@@ -1,5 +1,6 @@
 import React from "react"
 import { useSelector, useDispatch } from "react-redux"
+import { addBlog, likeBlog } from "./reducers/anecdoteReducer"
 
 const App = () => {
   const anecdotes = useSelector(state => state)
@@ -7,19 +8,14 @@ const App = () => {
 
   const vote = id => {
     // console.log("vote", id)
-    dispatch({ type: "VOTE", payload: { id } })
+    dispatch(likeBlog(id))
   }
 
   const createBlog = e => {
     e.preventDefault()
     const newBlog = e.target.blog.value
     e.target.blog.value = ""
-    dispatch({
-      type: "CREATE_BLOG",
-      payload: {
-        content: newBlog,
-      },
-    })
+    dispatch(addBlog(newBlog))
   }
 
   return (
