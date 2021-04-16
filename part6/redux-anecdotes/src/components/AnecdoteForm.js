@@ -1,6 +1,7 @@
 import React from "react"
 import { addBlog } from "../reducers/anecdoteReducer"
 import { useDispatch } from "react-redux"
+import service from "../service"
 
 const AnecdoteForm = () => {
   const dispatch = useDispatch()
@@ -9,7 +10,9 @@ const AnecdoteForm = () => {
     e.preventDefault()
     const newBlog = e.target.blog.value
     e.target.blog.value = ""
-    dispatch(addBlog(newBlog))
+    service.create(newBlog).then(res => {
+      dispatch(addBlog(res))
+    })
   }
 
   return (

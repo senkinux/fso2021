@@ -1,5 +1,3 @@
-// const anecdotesAtStart = []
-
 const getId = () => (100000 * Math.random()).toFixed(0)
 
 const asObject = anecdote => {
@@ -10,13 +8,13 @@ const asObject = anecdote => {
   }
 }
 
-// const initialState = anecdotesAtStart.map(asObject)
-
 export const addBlog = newBlog => {
   return {
     type: "CREATE_BLOG",
     payload: {
-      content: newBlog,
+      content: newBlog.content,
+      votes: newBlog.votes,
+      id: newBlog.id,
     },
   }
 }
