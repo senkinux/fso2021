@@ -1,3 +1,4 @@
+import service from "../service"
 const getId = () => (100000 * Math.random()).toFixed(0)
 
 const asObject = anecdote => {
@@ -26,11 +27,12 @@ export const likeBlog = id => {
   }
 }
 
-export const initializeAnecdotes = anecdotes => {
-  return {
+export const initializeAnecdotes = () => async dispatch => {
+  const anecdotes = await service.getAll()
+  dispatch({
     type: "INIT",
     payload: anecdotes,
-  }
+  })
 }
 
 const reducer = (state = [], action) => {
