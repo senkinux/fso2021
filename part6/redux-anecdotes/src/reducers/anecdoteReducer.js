@@ -9,15 +9,16 @@ const asObject = anecdote => {
   }
 }
 
-export const addBlog = newBlog => {
-  return {
+export const addBlog = newBlog => async dispatch => {
+  const newAnecdote = await service.create(newBlog)
+  dispatch({
     type: "CREATE_BLOG",
     payload: {
-      content: newBlog.content,
-      votes: newBlog.votes,
-      id: newBlog.id,
+      content: newAnecdote.content,
+      votes: newAnecdote.votes,
+      id: newAnecdote.id,
     },
-  }
+  })
 }
 
 export const likeBlog = id => {
