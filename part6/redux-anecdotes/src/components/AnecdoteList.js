@@ -1,7 +1,7 @@
 import React from "react"
 import { useSelector, useDispatch } from "react-redux"
 import { likeBlog } from "../reducers/anecdoteReducer"
-import { setMessage, removeMessage } from "../reducers/notificationReducer"
+import { setMessage } from "../reducers/notificationReducer"
 
 const AnecdoteList = () => {
   const anecdotes = useSelector(state => state.anecdotes)
@@ -18,9 +18,6 @@ const AnecdoteList = () => {
     )
     const likedAnecdote = filteredAnecdote[0].content
     dispatch(setMessage(likedAnecdote))
-    setTimeout(() => {
-      dispatch(removeMessage())
-    }, 5000)
   }
 
   return (

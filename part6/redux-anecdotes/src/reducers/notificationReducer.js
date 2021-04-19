@@ -1,10 +1,15 @@
 const initialState = ""
 
-export const setMessage = message => {
-  return {
+export const setMessage = message => async dispatch => {
+  dispatch({
     type: "SET_MESSAGE",
-    payload: message,
-  }
+    payload: {
+      message,
+      delay: setTimeout(() => {
+        dispatch(removeMessage())
+      }, 5000),
+    },
+  })
 }
 
 export const removeMessage = () => {
@@ -16,7 +21,8 @@ export const removeMessage = () => {
 const notificationReducer = (state = initialState, action) => {
   switch (action.type) {
     case "SET_MESSAGE":
-      return action.payload
+      clearTimeout(state.delay)
+      return action.payload.message
     case "REMOVE_MESSAGE":
       return initialState
     default:
