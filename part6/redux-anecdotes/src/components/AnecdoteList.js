@@ -11,10 +11,10 @@ const AnecdoteList = () => {
   )
   const dispatch = useDispatch()
 
-  const vote = id => {
-    dispatch(likeBlog(id))
+  const vote = anecdote => {
+    dispatch(likeBlog(anecdote))
     const filteredAnecdote = anecdotes.filter(a =>
-      a.id === id ? a.content : ""
+      a.id === anecdote.id ? a.content : ""
     )
     const likedAnecdote = filteredAnecdote[0].content
     dispatch(setMessage(likedAnecdote))
@@ -32,7 +32,7 @@ const AnecdoteList = () => {
             <div>{anecdote.content}</div>
             <div>
               has {anecdote.votes}
-              <button onClick={() => vote(anecdote.id)}>vote</button>
+              <button onClick={() => vote(anecdote)}>vote</button>
             </div>
           </div>
         ))}

@@ -21,11 +21,14 @@ export const addBlog = newBlog => async dispatch => {
   })
 }
 
-export const likeBlog = id => {
-  return {
-    type: "VOTE",
-    payload: { id },
+export const likeBlog = anecdote => async dispatch => {
+  const votedAnecdote = {
+    ...anecdote,
+    votes: anecdote.votes + 1,
   }
+  const updatedAnecdote = await service.update(votedAnecdote)
+  const id = updatedAnecdote.id
+  dispatch({ type: "VOTE", payload: { id } })
 }
 
 export const initializeAnecdotes = () => async dispatch => {
