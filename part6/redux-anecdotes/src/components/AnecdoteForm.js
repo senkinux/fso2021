@@ -1,15 +1,13 @@
 import React from "react"
-import { addBlog, initializeAnecdotes } from "../reducers/anecdoteReducer"
-import { useDispatch } from "react-redux"
+import { addBlog } from "../reducers/anecdoteReducer"
+import { connect } from "react-redux"
 
-const AnecdoteForm = () => {
-  const dispatch = useDispatch()
-
+const AnecdoteForm = props => {
   const createBlog = e => {
     e.preventDefault()
     const newBlog = e.target.blog.value
     e.target.blog.value = ""
-    dispatch(addBlog(newBlog))
+    props.addBlog(newBlog)
   }
 
   return (
@@ -25,4 +23,6 @@ const AnecdoteForm = () => {
   )
 }
 
-export default AnecdoteForm
+const mapDispatchToProps = { addBlog }
+
+export default connect(null, mapDispatchToProps)(AnecdoteForm)
