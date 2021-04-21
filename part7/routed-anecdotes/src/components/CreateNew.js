@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React from "react"
 import { useHistory } from "react-router-dom"
 import { useField } from "../hooks/index"
 
@@ -11,7 +11,6 @@ const CreateNew = props => {
 
   const handleSubmit = e => {
     e.preventDefault()
-    console.log()
     props.addNew({
       content: content.value,
       author: author.value,
@@ -19,6 +18,13 @@ const CreateNew = props => {
       votes: 0,
     })
     history.push("/")
+  }
+
+  const resetFields = e => {
+    e.preventDefault()
+    content.reset()
+    author.reset()
+    info.reset()
   }
 
   return (
@@ -38,6 +44,7 @@ const CreateNew = props => {
           <input {...info} />
         </div>
         <button>create</button>
+        <button onClick={resetFields}>reset</button>
       </form>
     </div>
   )

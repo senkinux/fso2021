@@ -1,11 +1,5 @@
 import React, { useState } from "react"
-import {
-  BrowserRouter as Router,
-  Link,
-  Switch,
-  Route,
-  useRouteMatch,
-} from "react-router-dom"
+import { Switch, Route, useRouteMatch } from "react-router-dom"
 import Menu from "./components/Menu"
 import About from "./components/About"
 import Footer from "./components/Footer"
