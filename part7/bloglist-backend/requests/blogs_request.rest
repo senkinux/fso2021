@@ -1,0 +1,40 @@
+GET http://localhost:3003/api/blogs
+
+###
+
+POST http://localhost:3003/api/blogs
+Content-Type: application/json
+
+{
+  "title": "Atomic Habits",
+  "author": "James Clear",
+  "url": "www.atomichabits.com",
+  "likes": 0
+}
+
+###
+
+POST http://localhost:3003/api/blogs
+Content-Type: application/json
+
+{
+  "title": "The Power Of Habit",
+  "author": "Charles Duhigg",
+  "url": "www.duhigg.com",
+  "likes": 0
+}
+
+###
+
+DELETE http://localhost:3003/api/blogs/606ee1626e790f2654aea4e1
+###
+
+PUT http://localhost:3003/api/blogs/606c271a0f1fa07960c45341
+Content-Type: application/json
+
+{
+  "title": "Atomic Habits",
+  "author": "James Clear",
+  "url": "www.atomichabits.com",
+  "likes": 10
+}
