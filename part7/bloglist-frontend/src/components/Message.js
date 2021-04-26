@@ -1,14 +1,10 @@
 import React from "react"
+import styles from "../index.module.css"
 
-const Message = props => {
-	return (
-		<div>
-			<h2 className={props.className} id="message">
-				{" "}
-				{props.message}
-			</h2>
-		</div>
-	)
+const Message = ({ message, success }) => {
+  return (
+    <div className={success ? styles.success : styles.error}>{message}</div>
+  )
 }
 
 export default Message

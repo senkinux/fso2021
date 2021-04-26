@@ -1,17 +1,23 @@
 import React, { useState, useEffect } from "react"
-import "./index.css"
 import Blog from "./components/Blog"
 import Login from "./components/Login"
 import Message from "./components/Message"
 import ShowBlogForm from "./components/ShowBlogForm"
 import blogService from "./services/blogs"
+import { useSelector, useDispatch } from "react-redux"
+import {
+  showMessage,
+  showErrorMessage,
+  hideMessage,
+} from "./reducers/notificationReducer"
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
   const [user, setUser] = useState(null)
-  const [message, setMessage] = useState("")
-  const [error, setError] = useState(false)
   const [blogFormVisible, setBlogFormVisible] = useState(false)
+
+  const dispatch = useDispatch()
+  const notification = useSelector(state => state.notification)
 
   useEffect(() => {
     blogService.getAll().then(blogs => setBlogs(blogs))
@@ -51,18 +57,16 @@ const App = () => {
     try {
       const newBlog = await blogService.create(blog)
       setBlogs(blogs.concat(newBlog))
-      setMessage(
-        `${newBlog.title} by ${newBlog.author} was successfully created`
-      )
+      const message = `${blog.title} by ${blog.author} was created`
+      dispatch(showMessage(message))
       setTimeout(() => {
-        setMessage("")
+        dispatch(hideMessage())
       }, 2500)
     } catch (error) {
-      setError(true)
-      setMessage(error.name)
+      console.log({ error })
+      dispatch(showErrorMessage("Cannot create. Please fill in all fields"))
       setTimeout(() => {
-        setError(false)
-        setMessage("")
+        dispatch(hideMessage(""))
       }, 2500)
     }
   }
@@ -84,11 +88,11 @@ const App = () => {
 
   return (
     <div>
-      {message && !error ? (
-        <Message message={message} className="success" />
-      ) : null}
-      {message && error ? (
-        <Message message={message} className="error" />
+      {notification.message ? (
+        <Message
+          message={notification.message}
+          success={notification.success}
+        />
       ) : null}
       {user ? (
         <div>
@@ -112,7 +116,7 @@ const App = () => {
             ))}
         </div>
       ) : (
-        <Login setUser={setUser} setMessage={setMessage} setError={setError} />
+        <Login setUser={setUser} />
       )}
     </div>
   )
