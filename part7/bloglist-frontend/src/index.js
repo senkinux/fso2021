@@ -9,11 +9,13 @@ import { BrowserRouter as Router } from "react-router-dom"
 import notificationReducer from "./reducers/notificationReducer"
 import blogsReducer from "./reducers/blogsReducer"
 import userReducer from "./reducers/userReducer"
+import userlistReducer from "./reducers/userlistReducer"
 
 const reducer = combineReducers({
   notification: notificationReducer,
   blogs: blogsReducer,
   user: userReducer,
+  userlist: userlistReducer,
 })
 
 const store = createStore(reducer, composeWithDevTools(applyMiddleware(thunk)))
