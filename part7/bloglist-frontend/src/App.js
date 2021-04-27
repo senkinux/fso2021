@@ -5,23 +5,20 @@ import Message from "./components/Message"
 import ShowBlogForm from "./components/ShowBlogForm"
 import blogService from "./services/blogs"
 import { useSelector, useDispatch } from "react-redux"
-import {
-  showMessage,
-  showErrorMessage,
-  hideMessage,
-} from "./reducers/notificationReducer"
+import { initializeBlogs, addNewBlog } from "./reducers/blogsReducer"
 
 const App = () => {
-  const [blogs, setBlogs] = useState([])
+  const [hookBlogs, setBlogs] = useState([])
   const [user, setUser] = useState(null)
   const [blogFormVisible, setBlogFormVisible] = useState(false)
 
   const dispatch = useDispatch()
   const notification = useSelector(state => state.notification)
+  const blogs = useSelector(state => state.blogs)
 
   useEffect(() => {
-    blogService.getAll().then(blogs => setBlogs(blogs))
-  }, [])
+    dispatch(initializeBlogs())
+  }, [dispatch])
 
   useEffect(() => {
     const loggedUser = window.localStorage.getItem("loggedUser")
@@ -38,7 +35,7 @@ const App = () => {
   }
 
   const likeHandler = async blog => {
-    const newBlog = {
+    const likedBlog = {
       author: blog.author,
       likes: blog.likes + 1,
       title: blog.title,
@@ -46,29 +43,15 @@ const App = () => {
       user: blog.user.id,
     }
 
-    const response = await blogService.update(blog.id, newBlog)
+    const response = await blogService.update(blog.id, likedBlog)
     const updatedBlogIdx = blogs.findIndex(b => b.id === response.id)
     const listCopy = [...blogs]
     listCopy[updatedBlogIdx] = response
     setBlogs(listCopy)
   }
 
-  const createBlog = async blog => {
-    try {
-      const newBlog = await blogService.create(blog)
-      setBlogs(blogs.concat(newBlog))
-      const message = `${blog.title} by ${blog.author} was created`
-      dispatch(showMessage(message))
-      setTimeout(() => {
-        dispatch(hideMessage())
-      }, 2500)
-    } catch (error) {
-      console.log({ error })
-      dispatch(showErrorMessage("Cannot create. Please fill in all fields"))
-      setTimeout(() => {
-        dispatch(hideMessage(""))
-      }, 2500)
-    }
+  const createBlog = blog => {
+    dispatch(addNewBlog(blog))
   }
 
   const deleteHandler = async blog => {
