@@ -3,7 +3,6 @@ import Blog from "./components/Blog"
 import Login from "./components/Login"
 import Message from "./components/Message"
 import ShowBlogForm from "./components/ShowBlogForm"
-import blogService from "./services/blogs"
 import { useSelector, useDispatch } from "react-redux"
 import {
   initializeBlogs,
@@ -11,31 +10,26 @@ import {
   likeBlog,
   deleteBlog,
 } from "./reducers/blogsReducer"
+import { getUser, logoutUser } from "./reducers/userReducer"
 
 const App = () => {
-  const [user, setUser] = useState(null)
   const [blogFormVisible, setBlogFormVisible] = useState(false)
 
   const dispatch = useDispatch()
   const notification = useSelector(state => state.notification)
   const blogs = useSelector(state => state.blogs)
+  const user = useSelector(state => state.user)
 
   useEffect(() => {
     dispatch(initializeBlogs())
   }, [dispatch])
 
   useEffect(() => {
-    const loggedUser = window.localStorage.getItem("loggedUser")
-    if (loggedUser) {
-      const parsedUser = JSON.parse(loggedUser)
-      setUser(parsedUser)
-      blogService.setToken(parsedUser.token)
-    }
+    getUser()
   }, [])
 
   const logoutHandler = () => {
-    window.localStorage.removeItem("loggedUser")
-    setUser(null)
+    dispatch(logoutUser())
   }
 
   const likeHandler = blog => {
@@ -80,7 +74,7 @@ const App = () => {
             ))}
         </div>
       ) : (
-        <Login setUser={setUser} />
+        <Login dispatch={dispatch} />
       )}
     </div>
   )

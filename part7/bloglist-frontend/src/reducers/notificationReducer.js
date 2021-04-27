@@ -14,10 +14,9 @@ export const showErrorMessage = message => {
   }
 }
 
-export const hideMessage = message => {
+export const hideMessage = () => {
   return {
     type: "HIDE_MESSAGE",
-    payload: { message },
   }
 }
 
@@ -35,7 +34,7 @@ const notificationReducer = (state = initialState, action) => {
       }
     case "HIDE_MESSAGE":
       return {
-        message: action.payload.message,
+        message: "",
         success: null,
       }
     default:
