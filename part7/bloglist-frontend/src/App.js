@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from "react"
-import Blog from "./components/Blog"
 import Login from "./components/Login"
 import Message from "./components/Message"
+import Users from "./components/Users"
 import ShowBlogForm from "./components/ShowBlogForm"
+import BlogList from "./components/BlogList"
 import { useSelector, useDispatch } from "react-redux"
+import { Link, Route, Switch } from "react-router-dom"
 import {
   initializeBlogs,
   addNewBlog,
@@ -25,8 +27,8 @@ const App = () => {
   }, [dispatch])
 
   useEffect(() => {
-    getUser()
-  }, [])
+    dispatch(getUser())
+  }, [dispatch])
 
   const logoutHandler = () => {
     dispatch(logoutUser())
@@ -57,21 +59,23 @@ const App = () => {
           <h2>blogs</h2>
           {`${user.username} is logged in `}
           <button onClick={logoutHandler}>logout</button>
-          <ShowBlogForm
-            setBlogFormVisible={setBlogFormVisible}
-            blogFormVisible={blogFormVisible}
-            createBlog={createBlog}
-          />
-          {blogs
-            .sort((a, b) => b.likes - a.likes)
-            .map(blog => (
-              <Blog
-                key={blog.id}
-                blog={blog}
-                deleteHandler={() => deleteHandler(blog)}
-                likeHandler={() => likeHandler(blog)}
+          <Switch>
+            <Route path="/api/users">
+              <Users />
+            </Route>
+            <Route path="/api/blogs">
+              <ShowBlogForm
+                setBlogFormVisible={setBlogFormVisible}
+                blogFormVisible={blogFormVisible}
+                createBlog={createBlog}
               />
-            ))}
+              <BlogList
+                blogs={blogs}
+                deleteHandler={deleteHandler}
+                likeHandler={likeHandler}
+              />
+            </Route>
+          </Switch>
         </div>
       ) : (
         <Login dispatch={dispatch} />
