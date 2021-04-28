@@ -3,6 +3,7 @@ const Blog = ({ blog, likeHandler }) => {
     return null
   }
   const url = blog.url
+  // console.log(blog.comments)
   return (
     <div>
       <h1>
@@ -15,6 +16,12 @@ const Blog = ({ blog, likeHandler }) => {
           <button onClick={() => likeHandler(blog)}>like</button>
         </p>
         <p>added by {blog.user.name}</p>
+        <h3>comments</h3>
+        <ul>
+          {blog.comments.map(comment => (
+            <li key={comment.id}>{comment.content}</li>
+          ))}
+        </ul>
       </div>
     </div>
   )
