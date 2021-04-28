@@ -12,15 +12,15 @@ const userReducer = (state = null, action) => {
   }
 }
 
-export const getUser = () => {
+export const getUser = () => async dispatch => {
   const loggedUser = window.localStorage.getItem("loggedUser")
   if (loggedUser) {
     const parsedUser = JSON.parse(loggedUser)
     blogService.setToken(parsedUser.token)
-    return {
+    dispatch({
       type: "GET_USER",
       payload: parsedUser,
-    }
+    })
   }
 }
 

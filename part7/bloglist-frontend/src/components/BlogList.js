@@ -1,18 +1,21 @@
-import Blog from "../components/Blog"
+import { Link } from "react-router-dom"
 
-const BlogList = ({ blogs, deleteHandler, likeHandler }) => {
+const BlogList = ({ blogs }) => {
+  if (!blogs) {
+    return null
+  }
   return (
     <>
-      {blogs
-        .sort((a, b) => b.likes - a.likes)
-        .map(blog => (
-          <Blog
-            key={blog.id}
-            blog={blog}
-            deleteHandler={() => deleteHandler(blog)}
-            likeHandler={() => likeHandler(blog)}
-          />
-        ))}
+      <h2>blogs</h2>
+      <ul>
+        {blogs
+          .sort((a, b) => b.likes - a.likes)
+          .map(blog => (
+            <li key={blog.id}>
+              <Link to={`/api/blogs/${blog.id}`}>{blog.title}</Link>
+            </li>
+          ))}
+      </ul>
     </>
   )
 }
