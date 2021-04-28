@@ -9,12 +9,7 @@ import User from "./components/User"
 import Menu from "./components/Menu"
 import { useSelector, useDispatch } from "react-redux"
 import { Route, Switch, useRouteMatch } from "react-router-dom"
-import {
-  initializeBlogs,
-  addNewBlog,
-  likeBlog,
-  deleteBlog,
-} from "./reducers/blogsReducer"
+import { initializeBlogs, addNewBlog, likeBlog } from "./reducers/blogsReducer"
 import { getUser } from "./reducers/userReducer"
 import { getUserlist } from "./reducers/userlistReducer"
 
@@ -49,10 +44,6 @@ const App = () => {
 
   const createBlog = blog => {
     dispatch(addNewBlog(blog))
-  }
-
-  const deleteHandler = blog => {
-    dispatch(deleteBlog(blog))
   }
 
   return (

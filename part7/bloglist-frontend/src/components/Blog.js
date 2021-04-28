@@ -1,9 +1,9 @@
+import Comment from "./Comment"
 const Blog = ({ blog, likeHandler }) => {
   if (!blog) {
     return null
   }
   const url = blog.url
-  // console.log(blog.comments)
   return (
     <div>
       <h1>
@@ -17,6 +17,7 @@ const Blog = ({ blog, likeHandler }) => {
         </p>
         <p>added by {blog.user.name}</p>
         <h3>comments</h3>
+        <Comment id={blog.id} />
         <ul>
           {blog.comments.map(comment => (
             <li key={comment.id}>{comment.content}</li>

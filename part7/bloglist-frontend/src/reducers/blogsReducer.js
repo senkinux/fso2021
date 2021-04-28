@@ -31,7 +31,6 @@ export const likeBlog = blog => async dispatch => {
     user: blog.user.id,
   }
   const response = await blogService.update(blog.id, likedBlog)
-  console.log(response)
   dispatch({ type: "LIKE_BLOG", payload: response })
 }
 
