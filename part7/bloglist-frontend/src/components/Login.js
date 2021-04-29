@@ -3,6 +3,7 @@ import loginService from "../services/login"
 import blogService from "../services/blogs"
 import { loginUser } from "../reducers/userReducer"
 import { showErrorMessage, hideMessage } from "../reducers/notificationReducer"
+import { Form, Button } from "react-bootstrap"
 
 const Login = ({ dispatch }) => {
   const [username, setUsername] = useState("")
@@ -28,30 +29,36 @@ const Login = ({ dispatch }) => {
   return (
     <div>
       <h2>login into application</h2>
-      <form onSubmit={handleLogin}>
-        <div>
-          <label></label>
-          username{" "}
-          <input
-            id="username"
-            type="text"
-            value={username}
-            onChange={e => setUsername(e.target.value)}
-          />
-        </div>
-        <div>
-          password{" "}
-          <input
-            id="password"
-            type="password"
-            value={password}
-            onChange={e => setPassword(e.target.value)}
-          />
-        </div>
-        <button type="submit" id="login-btn">
-          login
-        </button>
-      </form>
+      <Form onSubmit={handleLogin}>
+        <Form.Group>
+          <div>
+            <Form.Label>username</Form.Label>
+            <Form.Control
+              id="username"
+              type="text"
+              value={username}
+              onChange={e => setUsername(e.target.value)}
+            />
+          </div>
+          <div>
+            <Form.Label>password</Form.Label>
+            <Form.Control
+              id="password"
+              type="password"
+              value={password}
+              onChange={e => setPassword(e.target.value)}
+            />
+          </div>
+          <Button
+            variant="success"
+            className="mt-2"
+            type="submit"
+            id="login-btn"
+          >
+            login
+          </Button>
+        </Form.Group>
+      </Form>
     </div>
   )
 }

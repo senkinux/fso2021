@@ -10,6 +10,7 @@ import notificationReducer from "./reducers/notificationReducer"
 import blogsReducer from "./reducers/blogsReducer"
 import userReducer from "./reducers/userReducer"
 import userlistReducer from "./reducers/userlistReducer"
+import "bootstrap/dist/css/bootstrap.min.css"
 
 const reducer = combineReducers({
   notification: notificationReducer,

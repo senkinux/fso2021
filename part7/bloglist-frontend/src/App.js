@@ -12,6 +12,9 @@ import { Route, Switch, useRouteMatch } from "react-router-dom"
 import { initializeBlogs, addNewBlog, likeBlog } from "./reducers/blogsReducer"
 import { getUser } from "./reducers/userReducer"
 import { getUserlist } from "./reducers/userlistReducer"
+import Container from "react-bootstrap/Container"
+import Row from "react-bootstrap/Row"
+import Col from "react-bootstrap/Col"
 
 const App = () => {
   const [blogFormVisible, setBlogFormVisible] = useState(false)
@@ -47,9 +50,12 @@ const App = () => {
   }
 
   return (
-    <div>
-      <Menu loggedInUser={loggedInUser} dispatch={dispatch} />
-
+    <Container>
+      <Row>
+        <Col>
+          <Menu loggedInUser={loggedInUser} dispatch={dispatch} />
+        </Col>
+      </Row>
       {notification.message ? (
         <Message
           message={notification.message}
@@ -81,7 +87,7 @@ const App = () => {
       ) : (
         <Login dispatch={dispatch} />
       )}
-    </div>
+    </Container>
   )
 }
 

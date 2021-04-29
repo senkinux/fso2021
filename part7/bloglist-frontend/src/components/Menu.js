@@ -1,6 +1,8 @@
 import { Link } from "react-router-dom"
 import { logoutUser } from "../reducers/userReducer"
 import { useHistory } from "react-router-dom"
+import Nav from "react-bootstrap/Nav"
+import { Button } from "react-bootstrap"
 
 const Menu = ({ loggedInUser, dispatch }) => {
   const history = useHistory()
@@ -10,27 +12,23 @@ const Menu = ({ loggedInUser, dispatch }) => {
     history.push("/")
   }
 
-  const padding = {
-    paddingRight: 5,
-  }
-
   if (!loggedInUser) {
     return null
   }
 
   return (
-    <div>
-      <div>
-        <Link to="/api/blogs" style={padding}>
-          blogs
-        </Link>
-        <Link to="/api/users" style={padding}>
-          users
-        </Link>
-        {`${loggedInUser.username} is logged in `}
-        <button onClick={logoutHandler}>logout</button>
-      </div>
-    </div>
+    <Nav variant="pills">
+      <Nav.Item className="m-3">
+        <Link to="/api/blogs">blogs</Link>
+      </Nav.Item>
+      <Nav.Item className="m-3">
+        <Link to="/api/users">users</Link>
+      </Nav.Item>
+      <div className="m-3">{`${loggedInUser.username} is logged in `}</div>
+      <Button className="ml-4 mt-2" onClick={logoutHandler} variant="info">
+        logout
+      </Button>
+    </Nav>
   )
 }
 
