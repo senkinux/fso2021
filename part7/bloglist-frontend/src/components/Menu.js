@@ -19,10 +19,14 @@ const Menu = ({ loggedInUser, dispatch }) => {
   return (
     <Nav variant="pills">
       <Nav.Item className="m-3">
-        <Link to="/api/blogs">blogs</Link>
+        <Link to="/api/blogs" className="text-info">
+          <b>blogs</b>
+        </Link>
       </Nav.Item>
       <Nav.Item className="m-3">
-        <Link to="/api/users">users</Link>
+        <Link to="/api/users" className="text-info">
+          <b>users</b>
+        </Link>
       </Nav.Item>
       <div className="m-3">{`${loggedInUser.username} is logged in `}</div>
       <Button className="ml-4 mt-2" onClick={logoutHandler} variant="info">

@@ -13,8 +13,6 @@ import { initializeBlogs, addNewBlog, likeBlog } from "./reducers/blogsReducer"
 import { getUser } from "./reducers/userReducer"
 import { getUserlist } from "./reducers/userlistReducer"
 import Container from "react-bootstrap/Container"
-import Row from "react-bootstrap/Row"
-import Col from "react-bootstrap/Col"
 
 const App = () => {
   const [blogFormVisible, setBlogFormVisible] = useState(false)

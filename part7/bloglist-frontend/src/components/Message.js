@@ -1,5 +1,4 @@
 import React from "react"
-import styles from "../index.module.css"
 import Alert from "react-bootstrap/Alert"
 
 const Message = ({ message, success }) => {
