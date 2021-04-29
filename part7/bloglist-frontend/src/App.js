@@ -51,11 +51,7 @@ const App = () => {
 
   return (
     <Container>
-      <Row>
-        <Col>
-          <Menu loggedInUser={loggedInUser} dispatch={dispatch} />
-        </Col>
-      </Row>
+      <Menu loggedInUser={loggedInUser} dispatch={dispatch} />
       {notification.message ? (
         <Message
           message={notification.message}
@@ -63,27 +59,25 @@ const App = () => {
         />
       ) : null}
       {loggedInUser ? (
-        <div>
-          <Switch>
-            <Route path="/api/users/:id">
-              <User user={user} />
-            </Route>
-            <Route path="/api/users">
-              <Users userlist={userlist} />
-            </Route>
-            <Route path="/api/blogs/:id">
-              <Blog blog={blog} likeHandler={likeHandler} />
-            </Route>
-            <Route path="/api/blogs">
-              <ShowBlogForm
-                setBlogFormVisible={setBlogFormVisible}
-                blogFormVisible={blogFormVisible}
-                createBlog={createBlog}
-              />
-              <BlogList blogs={blogs} />
-            </Route>
-          </Switch>
-        </div>
+        <Switch>
+          <Route path="/api/users/:id">
+            <User user={user} />
+          </Route>
+          <Route path="/api/users">
+            <Users userlist={userlist} />
+          </Route>
+          <Route path="/api/blogs/:id">
+            <Blog blog={blog} likeHandler={likeHandler} />
+          </Route>
+          <Route path="/api/blogs">
+            <ShowBlogForm
+              setBlogFormVisible={setBlogFormVisible}
+              blogFormVisible={blogFormVisible}
+              createBlog={createBlog}
+            />
+            <BlogList blogs={blogs} />
+          </Route>
+        </Switch>
       ) : (
         <Login dispatch={dispatch} />
       )}
