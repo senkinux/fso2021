@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom"
+import Table from "react-bootstrap/Table"
 
 const BlogList = ({ blogs }) => {
   if (!blogs) {
@@ -6,16 +7,22 @@ const BlogList = ({ blogs }) => {
   }
   return (
     <>
-      <h2>blogs</h2>
-      <ul>
-        {blogs
-          .sort((a, b) => b.likes - a.likes)
-          .map(blog => (
-            <li key={blog.id}>
-              <Link to={`/api/blogs/${blog.id}`}>{blog.title}</Link>
-            </li>
-          ))}
-      </ul>
+      <h2 className="mt-4">blogs</h2>
+      <Table striped bordered variant="dark" size="sm">
+        <tbody>
+          {blogs
+            .sort((a, b) => b.likes - a.likes)
+            .map(blog => (
+              <tr key={blog.id}>
+                <td>
+                  <Link to={`/api/blogs/${blog.id}`} className="text-info">
+                    {blog.title}
+                  </Link>
+                </td>
+              </tr>
+            ))}
+        </tbody>
+      </Table>
     </>
   )
 }
