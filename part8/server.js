@@ -146,7 +146,6 @@ const resolvers = {
       const authorsBooks = authors.map(author => {
         const filteredBooks = books.filter(book => book.author === author.name)
         filteredBooks.born = author.born
-        console.log(filteredBooks)
         return filteredBooks
       })
 
