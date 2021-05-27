@@ -2,7 +2,13 @@ import React from "react"
 import ReactDOM from "react-dom"
 import App from "./App"
 
-import { ApolloClient, HttpLink, InMemoryCache, gql } from "@apollo/client"
+import {
+  ApolloProvider,
+  ApolloClient,
+  HttpLink,
+  InMemoryCache,
+  gql,
+} from "@apollo/client"
 const client = new ApolloClient({
   cache: new InMemoryCache(),
   link: new HttpLink({
@@ -10,17 +16,9 @@ const client = new ApolloClient({
   }),
 })
 
-const query = gql`
-  query {
-    allBooks {
-      title
-      author
-      published
-      genres
-    }
-  }
-`
-
-client.query({ query }).then(res => console.log(res.data))
-
-ReactDOM.render(<App />, document.getElementById("root"))
+ReactDOM.render(
+  <ApolloProvider client={client}>
+    <App />
+  </ApolloProvider>,
+  document.getElementById("root")
+)
