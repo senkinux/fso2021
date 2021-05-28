@@ -55,16 +55,6 @@ const Authors = ({ show, authors }) => {
           onChange={({ value }) => setName(value)}
           value={{ label: name, value: name } || null}
         />
-        {/* <label>
-          name:
-          <select value={name} onChange={e => setName(e.target.value)}>
-            {authors.map(author => (
-              <option key={author.name} value={author.name}>
-                {author.name}
-              </option>
-            ))}
-          </select>
-        </label> */}
         <br />
         <label htmlFor="born">born :</label>
         <input id="born" value={born} onChange={e => setBorn(e.target.value)} />
