@@ -1,6 +1,7 @@
 import React, { useState } from "react"
 import { useMutation } from "@apollo/client"
 import { ALL_AUTHORS, EDIT_AUTHOR } from "../queries"
+import Select from "react-select"
 
 const Authors = ({ show, authors }) => {
   const [name, setName] = useState("")
@@ -12,6 +13,11 @@ const Authors = ({ show, authors }) => {
   if (!show) {
     return null
   }
+
+  const authorsOptions = authors.map(author => ({
+    value: author.name,
+    label: author.name,
+  }))
 
   const submitHandler = e => {
     e.preventDefault()
@@ -43,19 +49,25 @@ const Authors = ({ show, authors }) => {
       </table>
       <h2>Set birth year</h2>
       <form onSubmit={submitHandler}>
-        <label htmlFor="name">name: </label>
-        <input
-          name="name"
-          value={name}
-          onChange={e => setName(e.target.value)}
+        <Select
+          placeholder="Select Author..."
+          options={authorsOptions}
+          onChange={({ value }) => setName(value)}
+          value={{ label: name, value: name } || null}
         />
+        {/* <label>
+          name:
+          <select value={name} onChange={e => setName(e.target.value)}>
+            {authors.map(author => (
+              <option key={author.name} value={author.name}>
+                {author.name}
+              </option>
+            ))}
+          </select>
+        </label> */}
         <br />
         <label htmlFor="born">born :</label>
-        <input
-          name="born"
-          value={born}
-          onChange={e => setBorn(e.target.value)}
-        />
+        <input id="born" value={born} onChange={e => setBorn(e.target.value)} />
         <br />
         <button>update author</button>
       </form>
