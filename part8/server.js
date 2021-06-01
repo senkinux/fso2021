@@ -1,5 +1,22 @@
-const { ApolloServer, gql } = require("apollo-server")
+const { ApolloServer, gql, UserInputError } = require("apollo-server")
 const { v1: uuid } = require("uuid")
+const mongoose = require("mongoose")
+const dotenv = require("dotenv").config()
+const Author = require("./models/author")
+const Book = require("./models/book")
+const { argsToArgsConfig } = require("graphql/type/definition")
+
+const MONGODB_URI = process.env.MONGODB_URI
+
+mongoose
+  .connect(MONGODB_URI, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+    useFindAndModify: false,
+    useCreateIndex: true,
+  })
+  .then(() => console.log("connected to DB"))
+  .catch(err => console.log(err.message))
 
 let authors = [
   {
@@ -87,15 +104,17 @@ let books = [
 const typeDefs = gql`
   type Book {
     title: String!
-    author: String!
+    author: Author!
     published: Int!
     genres: [String!]!
+    id: ID!
   }
 
   type Author {
     name: String!
     bookCount: Int!
     born: Int
+    id: ID!
   }
 
   type Query {
@@ -155,15 +174,18 @@ const resolvers = {
     },
   },
   Mutation: {
-    addBook: (root, args) => {
-      const newBook = { ...args, id: uuid() }
-      books = books.concat(newBook)
-      const authorList = authors.map(author => author.name)
-      if (!authorList.includes(args.author)) {
-        const newAuthor = { name: args.author, born: null, id: uuid() }
-        authors = authors.concat(newAuthor)
+    addBook: async (root, args) => {
+      const author = new Author({ name: args.author, born: null })
+      const book = new Book({ ...args, author })
+      try {
+        await book.save()
+        await author.save()
+      } catch (error) {
+        throw new UserInputError(error.message, {
+          invalidArgs: args,
+        })
       }
-      return newBook
+      return book
     },
 
     editAuthor: (root, args) => {
