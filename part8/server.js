@@ -138,67 +138,63 @@ const typeDefs = gql`
 
 const resolvers = {
   Query: {
-    bookCount: () => books.length,
-    authorCount: () => authors.length,
+    bookCount: () => Book.collection.countDocuments(),
+    authorCount: () => Author.collection.countDocuments(),
     allBooks: (root, args) => {
-      if (!args.author && !args.genre) {
-        return books
-      } else if (args.genre && args.author) {
-        const booksByAuthor = books.filter(
-          book => book.author === args.author && book
-        )
-        const booksByGenreAndAuthor = booksByAuthor.filter(book =>
-          book.genres.find(genre => genre === args.genre)
-        )
-        return booksByGenreAndAuthor
-      } else if (args.author) {
-        return books.filter(book => book.author === args.author && book)
-      } else {
-        const booksBySelectedGenre = books.filter(book =>
-          book.genres.find(genre => genre === args.genre)
-        )
-
-        return booksBySelectedGenre
-      }
+      return Book.find({}).populate("author")
     },
     allAuthors: () => {
-      const authorsBooks = authors.map(author => {
-        const filteredBooks = books.filter(book => book.author === author.name)
-        filteredBooks.born = author.born
-        return filteredBooks
-      })
-
-      return authorsBooks.map(el => {
-        return { bookCount: el.length, name: el[0].author, born: el.born }
-      })
+      return Author.find({})
     },
   },
   Mutation: {
     addBook: async (root, args) => {
-      const author = new Author({ name: args.author, born: null })
-      const book = new Book({ ...args, author })
-      try {
-        await book.save()
-        await author.save()
-      } catch (error) {
-        throw new UserInputError(error.message, {
-          invalidArgs: args,
+      // search whether author is in DB
+      const authorExists = await Author.findOne({ name: args.author })
+      // if author doesn't exist
+      if (!authorExists) {
+        const author = new Author({
+          name: args.author,
+          born: null,
         })
+        const book = new Book({ ...args, author })
+
+        try {
+          await book.save()
+          await author.save()
+          return book
+        } catch (error) {
+          throw new UserInputError(error.message, {
+            invalidArgs: args,
+          })
+        }
+      } else {
+        // if author already exists
+        const book = new Book({ ...args, author: authorExists })
+        await book.save()
+        return book
       }
-      return book
     },
 
-    editAuthor: (root, args) => {
-      const authorToUpdate = authors.find(author => author.name === args.name)
-      if (!authorToUpdate) {
+    editAuthor: async (root, args) => {
+      const author = await Author.findOne({ name: args.name })
+      if (!author) {
         return null
       }
 
-      const updatedAuthor = { ...authorToUpdate, born: args.setBornTo }
-      authors = authors.map(author =>
-        author.name === updatedAuthor.name ? updatedAuthor : author
-      )
-      return updatedAuthor
+      author.born = args.setBornTo
+
+      try {
+        await author.save()
+      } catch (error) {
+        throw (
+          (new UserInputError(error.message),
+          {
+            invalidArgs: args,
+          })
+        )
+      }
+      return author
     },
   },
 }
