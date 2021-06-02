@@ -1,10 +1,16 @@
-const { ApolloServer, gql, UserInputError } = require("apollo-server")
+const {
+  ApolloServer,
+  gql,
+  UserInputError,
+  AuthenticationError,
+} = require("apollo-server")
 const { v1: uuid } = require("uuid")
 const mongoose = require("mongoose")
 const dotenv = require("dotenv").config()
 const Author = require("./models/author")
 const Book = require("./models/book")
-const { argsToArgsConfig } = require("graphql/type/definition")
+const User = require("./models/user")
+const jwt = require("jsonwebtoken")
 
 const MONGODB_URI = process.env.MONGODB_URI
 
@@ -161,12 +167,18 @@ const resolvers = {
     allAuthors: () => {
       return Author.find({})
     },
+    me: (root, args, context) => context.currentUser,
   },
   Mutation: {
-    addBook: async (root, args) => {
+    addBook: async (root, args, context) => {
       // search whether author is in DB
       const authorExists = await Author.findOne({ name: args.author })
+      const { currentUser } = context
       // if author doesn't exist
+      if (!currentUser) {
+        throw new AuthenticationError("not authenticated")
+      }
+
       if (!authorExists) {
         const author = new Author({
           name: args.author,
@@ -191,8 +203,14 @@ const resolvers = {
       }
     },
 
-    editAuthor: async (root, args) => {
+    editAuthor: async (root, args, context) => {
       const author = await Author.findOne({ name: args.name })
+      const { currentUser } = context
+
+      if (!currentUser) {
+        throw new AuthenticationError("not authenticated")
+      }
+
       if (!author) {
         return null
       }
@@ -211,12 +229,47 @@ const resolvers = {
       }
       return author
     },
+
+    createUser: async (root, args) => {
+      const user = new User({ ...args })
+      try {
+        await user.save()
+      } catch (error) {
+        throw new UserInputError(error.message, { invalidArgs: args })
+      }
+      return user
+    },
+
+    login: async (root, args) => {
+      const user = await User.findOne({ username: args.username })
+
+      if (!user || args.password !== "fso2021") {
+        throw new UserInputError("wrong credentials")
+      }
+
+      const userForToken = {
+        username: user.username,
+        id: user._id,
+      }
+
+      return { value: jwt.sign(userForToken, process.env.JWT_SECRET) }
+    },
   },
 }
 
 const server = new ApolloServer({
   typeDefs,
   resolvers,
+  context: async ({ req }) => {
+    const auth = req ? req.headers.authorization : null
+    if (auth && auth.toLocaleLowerCase().startsWith("bearer ")) {
+      const decodedToken = jwt.verify(auth.substring(7), process.env.JWT_SECRET)
+      const currentUser = await User.findById(decodedToken.id)
+      return {
+        currentUser,
+      }
+    }
+  },
 })
 
 server.listen().then(({ url }) => {
