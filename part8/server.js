@@ -24,89 +24,6 @@ mongoose
   .then(() => console.log("connected to DB"))
   .catch(err => console.log(err.message))
 
-let authors = [
-  {
-    name: "Robert Martin",
-    id: "afa51ab0-344d-11e9-a414-719c6709cf3e",
-    born: 1952,
-  },
-  {
-    name: "Martin Fowler",
-    id: "afa5b6f0-344d-11e9-a414-719c6709cf3e",
-    born: 1963,
-  },
-  {
-    name: "Fyodor Dostoevsky",
-    id: "afa5b6f1-344d-11e9-a414-719c6709cf3e",
-    born: 1821,
-  },
-  {
-    name: "Joshua Kerievsky", // birthyear not known
-    id: "afa5b6f2-344d-11e9-a414-719c6709cf3e",
-  },
-  {
-    name: "Sandi Metz", // birthyear not known
-    id: "afa5b6f3-344d-11e9-a414-719c6709cf3e",
-  },
-]
-
-/*
- * Saattaisi olla järkevämpää assosioida kirja ja sen tekijä tallettamalla kirjan yhteyteen tekijän nimen sijaan tekijän id
- * Yksinkertaisuuden vuoksi tallennamme kuitenkin kirjan yhteyteen tekijän nimen
- */
-
-let books = [
-  {
-    title: "Clean Code",
-    published: 2008,
-    author: "Robert Martin",
-    id: "afa5b6f4-344d-11e9-a414-719c6709cf3e",
-    genres: ["refactoring"],
-  },
-  {
-    title: "Agile software development",
-    published: 2002,
-    author: "Robert Martin",
-    id: "afa5b6f5-344d-11e9-a414-719c6709cf3e",
-    genres: ["agile", "patterns", "design"],
-  },
-  {
-    title: "Refactoring, edition 2",
-    published: 2018,
-    author: "Martin Fowler",
-    id: "afa5de00-344d-11e9-a414-719c6709cf3e",
-    genres: ["refactoring"],
-  },
-  {
-    title: "Refactoring to patterns",
-    published: 2008,
-    author: "Joshua Kerievsky",
-    id: "afa5de01-344d-11e9-a414-719c6709cf3e",
-    genres: ["refactoring", "patterns"],
-  },
-  {
-    title: "Practical Object-Oriented Design, An Agile Primer Using Ruby",
-    published: 2012,
-    author: "Sandi Metz",
-    id: "afa5de02-344d-11e9-a414-719c6709cf3e",
-    genres: ["refactoring", "design"],
-  },
-  {
-    title: "Crime and punishment",
-    published: 1866,
-    author: "Fyodor Dostoevsky",
-    id: "afa5de03-344d-11e9-a414-719c6709cf3e",
-    genres: ["classic", "crime"],
-  },
-  {
-    title: "The Demon ",
-    published: 1872,
-    author: "Fyodor Dostoevsky",
-    id: "afa5de04-344d-11e9-a414-719c6709cf3e",
-    genres: ["classic", "revolution"],
-  },
-]
-
 const typeDefs = gql`
   type User {
     username: String!
@@ -164,52 +81,68 @@ const resolvers = {
     allBooks: (root, args) => {
       return Book.find({}).populate("author")
     },
-    allAuthors: () => {
-      return Author.find({})
+    allAuthors: async () => {
+      const authors = await Author.find({})
+      console.log(authors)
+      return authors
     },
     me: (root, args, context) => context.currentUser,
   },
   Mutation: {
     addBook: async (root, args, context) => {
-      // search whether author is in DB
-      const authorExists = await Author.findOne({ name: args.author })
       const { currentUser } = context
-      // if author doesn't exist
       if (!currentUser) {
-        throw new AuthenticationError("not authenticated")
+        throw new AuthenticationError("not authenticated to add books")
       }
 
-      if (!authorExists) {
-        const author = new Author({
-          name: args.author,
-          born: null,
-        })
-        const book = new Book({ ...args, author })
+      try {
+        let author = await Author.findOne({ name: args.author })
+        // if author doesn't exist
+        if (!author) {
+          author = new Author()
+          const book = new Book({ ...args, author: null })
+          await book.save()
+          const newAuthor = new Author({
+            name: args.author,
+            born: null,
+            books: [book._id],
+            bookCount: 1,
+          })
+          await newAuthor.save()
+          book.author = newAuthor._id
+          await book.save()
 
-        try {
+          const bookToReturn = await Book.findOne({
+            title: args.title,
+          }).populate("author")
+
+          console.log(bookToReturn)
+
+          return bookToReturn
+        } else {
+          // if author exists in DB
+          const book = new Book({ ...args, author: author._id })
+          author.books.concat(book._id)
           await book.save()
           await author.save()
-          return book
-        } catch (error) {
-          throw new UserInputError(error.message, {
-            invalidArgs: args,
-          })
+          const bookToReturn = await Book.findOne({
+            title: args.title,
+          }).populate("author")
+          return bookToReturn
         }
-      } else {
-        // if author already exists
-        const book = new Book({ ...args, author: authorExists })
-        await book.save()
-        return book
+      } catch (error) {
+        throw new UserInputError(error.message, {
+          invalidArgs: args,
+        })
       }
     },
 
     editAuthor: async (root, args, context) => {
-      const author = await Author.findOne({ name: args.name })
       const { currentUser } = context
-
       if (!currentUser) {
         throw new AuthenticationError("not authenticated")
       }
+      const author = await Author.findOne({ name: args.name })
 
       if (!author) {
         return null
