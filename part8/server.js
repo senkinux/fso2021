@@ -83,7 +83,6 @@ const resolvers = {
     },
     allAuthors: async () => {
       const authors = await Author.find({})
-      console.log(authors)
       return authors
     },
     me: (root, args, context) => context.currentUser,
@@ -115,8 +114,6 @@ const resolvers = {
           const bookToReturn = await Book.findOne({
             title: args.title,
           }).populate("author")
-
-          console.log(bookToReturn)
 
           return bookToReturn
         } else {
