@@ -3,16 +3,22 @@ import Authors from "./components/Authors"
 import Books from "./components/Books"
 import NewBook from "./components/NewBook"
 import LoginForm from "./components/LoginForm"
-import { useApolloClient, useQuery, useSubscription } from "@apollo/client"
-import { ALL_AUTHORS, ME, BOOK_ADDED, ALL_BOOKS } from "./queries"
+import {
+  useApolloClient,
+  useQuery,
+  useLazyQuery,
+  useSubscription,
+} from "@apollo/client"
+import { BOOK_ADDED, ALL_BOOKS, ALL_AUTHORS } from "./queries"
 import Recommendation from "./components/Recommendation"
 
 const App = () => {
   const [page, setPage] = useState("authors")
   const [token, setToken] = useState(null)
-  const result = useQuery(ALL_AUTHORS)
   const client = useApolloClient()
-  const me = useQuery(ME)
+
+  const [getBooksByGenre, { data }] = useLazyQuery(ALL_BOOKS)
+  const authorsResult = useQuery(ALL_AUTHORS)
 
   const updateCacheWith = addedBook => {
     const includedIn = (set, object) => set.map(p => p.id).includes(object.id)
@@ -41,17 +47,11 @@ const App = () => {
     }
   }, [])
 
-  if (result.loading) {
-    return <div>loading...</div>
-  }
-
   const logout = () => {
     setToken(null)
     localStorage.clear()
     client.resetStore()
   }
-
-  const userFavGenre = me.data.me.favoriteGenre
 
   return (
     <>
@@ -75,16 +75,17 @@ const App = () => {
         )}
       </div>
 
-      <Authors authors={result.data.allAuthors} show={page === "authors"} />
+      <Authors show={page === "authors"} authorsResult={authorsResult} />
 
-      <Books show={page === "books"} />
+      <Books
+        show={page === "books"}
+        getBooksByGenre={getBooksByGenre}
+        data={data}
+      />
 
       <NewBook show={page === "add"} />
 
-      <Recommendation
-        show={page === "recommendations"}
-        favGenre={userFavGenre}
-      />
+      <Recommendation show={page === "recommendations"} />
     </>
   )
 }

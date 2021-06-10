@@ -3,7 +3,7 @@ import { useMutation } from "@apollo/client"
 import { ALL_AUTHORS, EDIT_AUTHOR } from "../queries"
 import Select from "react-select"
 
-const Authors = ({ show, authors }) => {
+const Authors = ({ show, authorsResult }) => {
   const [name, setName] = useState("")
   const [born, setBorn] = useState("")
   const [updateAuthor] = useMutation(EDIT_AUTHOR, {
@@ -13,6 +13,12 @@ const Authors = ({ show, authors }) => {
   if (!show) {
     return null
   }
+
+  if (authorsResult.loading) {
+    return <div>loading...</div>
+  }
+
+  const authors = authorsResult.data.allAuthors
 
   const authorsOptions = authors.map(author => ({
     value: author.name,
